@@ -12,19 +12,23 @@ class EventMapViewController < UIViewController
   def viewDidLoad    
     super       
     
-    
+    @mvfe = mapViewWithEventLocation
+    @mvfe.setRegion(regionForEventLocation)
+    @mvfe.addAnnotation(annotationForEvent)
+    self.view.addSubview(@mvfe)  
     self.view.addSubview( segmentedControlWithMapOptions )
     self.view.addSubview( buttonToCloseScreen )   
-
     
   end
 
 
 
   def mapViewWithEventLocation
-    
-  end  
-
+    m_v_for_event = MKMapView.new.tap do |ann|
+      ann.frame = self.view.bounds
+      ann.mapType = MKMapTypeStandard
+    end
+  end 
   
 
   def segmentedControlWithMapOptions
@@ -58,9 +62,16 @@ class EventMapViewController < UIViewController
     @map_view_for_event = nil
   end
 
-  
-
   def shouldAutorotateToInterfaceOrientation(interfaceOrientation)
     interfaceOrientation == UIInterfaceOrientationPortrait
   end
+
+  def regionForEventLocation
+    MKCoordinateRegionMake(@event.location, MKCoordinateSpanMake(0.7,0.7))
+  end
+
+  def annotationForEvent
+    EventAnnotation.alloc.initWithCoordinate(@event.location, title:@event.name, andSubTitle:@event.address)
+  end
+
 end
