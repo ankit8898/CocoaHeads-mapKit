@@ -49,8 +49,15 @@ class EventMapViewController < UIViewController
     close_button
   end  
 
-  def switch_map_type(segmented_control)    
-    
+  def switch_map_type(segmented_control) 
+    @mvfe.mapType = case segmented_control.selectedSegmentIndex
+    when 0
+      MKMapTypeStandard
+    when 1
+      MKMapTypeSatellite
+    when 2
+      MKMapTypeHybrid
+    end
   end     
 
   def close
